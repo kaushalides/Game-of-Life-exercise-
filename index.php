@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>{{Game Of Excercise }}</title>
+    <title>Game Of Excercise </title>
     <style>
         .centerTable {
             margin: 0px auto;
@@ -31,6 +31,7 @@
 <body>
     <table class="centerTable">
         <?php
+        session_start();
         define('ROWS', 25);
         define('COLS', 25);
         function populateNextGen($currentGrid)
@@ -86,17 +87,23 @@
             return $livecount;
         }
         $grid = array();
-        $grid = array_fill(0, 25, array_fill(0, 25, 0));
 
-        $grid[11][12] = 1;
-        $grid[12][13] = 1;
-        $grid[13][11] = 1;
-        $grid[13][12] = 1;
-        $grid[13][13] = 1;
+        if (!isset($_SESSION['grid'])) {
+            $grid = array_fill(0, ROWS, array_fill(0, COLS, 0));
+            $grid[11][12] = 1;
+            $grid[12][13] = 1;
+            $grid[13][11] = 1;
+            $grid[13][12] = 1;
+            $grid[13][13] = 1;
+        } else {
+            $grid = $_SESSION['grid'];
+        }
         // print "<pre>";
         // print_r($grid);
         // print "</pre>";
         $grid =    populateNextGen($grid);
+        $_SESSION['grid'] = $grid;
+
         for ($i = 0; $i < ROWS; $i++) { ?>
             <tr>
                 <?php
